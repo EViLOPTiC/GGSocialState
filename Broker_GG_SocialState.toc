@@ -8,13 +8,13 @@
 
 
 #@no-lib-strip@
-lib\LibStub\LibStub.lua
-lib\CallbackHandler-1.0\CallbackHandler-1.0.xml
-lib\AceGUI-3.0\AceGUI-3.0.xml
-lib\AceConfig-3.0\AceConfig-3.0.xml
-lib\LibQTip-1.0\lib.xml
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\AceConfig-3.0\AceConfig-3.0.xml
+Libs\LibQTip-1.0\lib.xml
 #@end-no-lib-strip@
 
-lib\LibDataBroker-1.1\LibDataBroker-1.1.lua
+Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 
 GGSocialState.lua
