@@ -367,7 +367,6 @@ local function Entry_OnMouseUp(frame, info, button)
 			if i_type == "realid" then
 				local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID = BNGetFriendInfo(BNGetFriendIndex(presence_id))
 				local _, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText = BNGetFriendToonInfo(BNGetFriendIndex(presence_id), 1)
-
 				if client == "WoW" then
 					InviteUnit(toon_name.."-"..realmName)
 					return
@@ -559,9 +558,8 @@ function LDB.OnEnter(self)
 						local tableIndex = 0						
 						local status = ""
 
-						local _, _, _, _, _, _, _, isOnline, lastOnline, isAFK, isDND, broadcast, note = BNGetFriendInfoByID(presenceID)
+						local _, _, _, _, _, _, isOnline, lastOnline, isAFK, isDND, broadcast, note = BNGetFriendInfoByID(presenceID)
 						local _, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText = BNGetFriendToonInfo(i, toonidx)
-            
             if toonName then -- yeah
 
 						if faction then
@@ -673,7 +671,7 @@ function LDB.OnEnter(self)
 							line = tooltip:SetCell(line, 6, "|cff82c5ffDiablo 3|r")
 						end
             
-						if player["CLIENT"] == "HS" then
+						if player["CLIENT"] == "WTCG" then
 							line = tooltip:SetCell(line, 6, "|cff82c5ffHearthstone|r")
 						end
 					end
