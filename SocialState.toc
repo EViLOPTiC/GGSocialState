@@ -1,6 +1,6 @@
 ## Interface: 60000
 ## Title: SocialState
-## Version:6.0.0-Alpha
+## Version: @project-version@
 ## Notes: A friend/guild list viewer
 ## Author: Luzisto, gOOvER
 ## SavedVariables: SocialStateDB
