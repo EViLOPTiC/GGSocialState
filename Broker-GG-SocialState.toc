@@ -1,10 +1,11 @@
 ## Interface: 60000
-## Title: SocialState
-## Version: @project-version@
+## Title: GGSocialState
+## Version: 6.0.0
 ## Notes: A friend/guild list viewer
 ## Author: Luzisto, gOOvER
-## SavedVariables: SocialStateDB
+## SavedVariables: GGSocialStateDB
 ## OptionalDeps: Ace3, LibQTip-1.0, LibStub, CallbackHandler-1.0
+
 
 #@no-lib-strip@
 lib\LibStub\LibStub.lua
@@ -16,4 +17,4 @@ lib\LibQTip-1.0\lib.xml
 
 lib\LibDataBroker-1.1\LibDataBroker-1.1.lua
 
-SocialState.lua
+GGSocialState.lua

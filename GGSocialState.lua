@@ -15,12 +15,12 @@ local frame = CreateFrame("frame")
 local tooltip
 local LDB_ANCHOR
 
-local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("SocialState",
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("GGSocialState",
 {
 	type	= "data source",
 	icon	= "Interface\\Icons\\INV_Drink_08.png",
-	label	= "SocialState",
-	text	= "SocialState"
+	label	= "GGSocialState",
+	text	= "GGSocialState"
 })
 
 local update_Broker
@@ -128,7 +128,7 @@ local list_sort = {
 -- Ace config table
 -------------------------------------------------------------------------------
 local options = {
-	name = "SocialState",
+	name = "GGSocialState",
 	type = "group",
 	args = {
 		confdesc = {
@@ -147,40 +147,40 @@ local options = {
 			name = "Hide Guild name",
 			desc = "Show or hide the guild name.",
 			order = 3,
-			get = function() return SocialStateDB.hide_guildname end,
-			set = function(_, v) SocialStateDB.hide_guildname = v end,
+			get = function() return GGSocialStateDB.hide_guildname end,
+			set = function(_, v) GGSocialStateDB.hide_guildname = v end,
 		},
 		hide_hintline = {
 			type = "toggle", width = "normal",
 			name = "Hide the Hint line",
 			desc = "Show or hide the hint line under tooltip.",
 			order = 4,
-			get = function() return SocialStateDB.hide_hintline end,
-			set = function(_, v) SocialStateDB.hide_hintline = v end,
+			get = function() return GGSocialStateDB.hide_hintline end,
+			set = function(_, v) GGSocialStateDB.hide_hintline = v end,
 		},
 		hide_motd = {
 			type = "toggle", width = "normal",
 			name = "Hide the MotD",
 			desc = "Hide the guild MotD under the tooltip.",
 			order = 5,
-			get = function() return SocialStateDB.hide_gmotd end,
-			set = function(_, v) SocialStateDB.hide_gmotd = v end,
+			get = function() return GGSocialStateDB.hide_gmotd end,
+			set = function(_, v) GGSocialStateDB.hide_gmotd = v end,
 		},
 		expand_realID = {
 			order = 6,
 			type = "toggle", width = "normal",
 			name = "RealID 2 lines",
 			desc = "Expand RealID to 2 lines in the tooltip for extended info.",
-			get = function() return SocialStateDB.expand_realID end,
-			set = function(_, v) SocialStateDB.expand_realID = v end,
+			get = function() return GGSocialStateDB.expand_realID end,
+			set = function(_, v) GGSocialStateDB.expand_realID = v end,
 		},
 		tooltip_autohide = {
 			order = 7,
 			type = "input", width = "half",
 			name = "Autohide Delay:",
 			desc = "The tooltip will hide when not hovered over for this (default: 0.25)",
-			get = function() return SocialStateDB.tooltip_autohide end,
-			set = function(_, v) SocialStateDB.tooltip_autohide = v end,
+			get = function() return GGSocialStateDB.tooltip_autohide end,
+			set = function(_, v) GGSocialStateDB.tooltip_autohide = v end,
 		},
 		displayheader2 = {
 			order = 8,
@@ -192,30 +192,30 @@ local options = {
 			type = "toggle", width = "double",
 			name = "Hide Friends/Guild Labels",
 			desc = "Hide the Friends and Guild labels from the LDB",
-			get = function() return SocialStateDB.hide_LDB_labels end,
-			set = function(_, v) SocialStateDB.hide_LDB_labels = v update_Broker() end
+			get = function() return GGSocialStateDB.hide_LDB_labels end,
+			set = function(_, v) GGSocialStateDB.hide_LDB_labels = v update_Broker() end
 		},
 		hide_ldb_totals = {
 			order = 10,
 			type = "toggle", width = "normal",
 			name = "Hide Totals",
 			desc = "Hide the Totals field from the LDB",
-			get = function() return SocialStateDB.hide_LDB_totals end,
-			set = function(_, v) SocialStateDB.hide_LDB_totals = v update_Broker() end
+			get = function() return GGSocialStateDB.hide_LDB_totals end,
+			set = function(_, v) GGSocialStateDB.hide_LDB_totals = v update_Broker() end
 		},
 		split_ldb_friends = {
 			order = 11,
 			type = "toggle", width = "normal",
 			name = "Split Real ID and Normal Friends",
 			desc = "Split Real ID and Normal Friends on the LDB",
-			get = function() return SocialStateDB.split_LDB_friends end,
-			set = function(_, v) SocialStateDB.split_LDB_friends = v update_Broker() end
+			get = function() return GGSocialStateDB.split_LDB_friends end,
+			set = function(_, v) GGSocialStateDB.split_LDB_friends = v update_Broker() end
 		}
 	}
 }
 
-LibStub("AceConfig-3.0"):RegisterOptionsTable("SocialState", options)
-LibStub("AceConfigDialog-3.0"):AddToBlizOptions("SocialState")
+LibStub("AceConfig-3.0"):RegisterOptionsTable("GGSocialState", options)
+LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GGSocialState")
 
 -- MoP Fix <3 Chinchilla
 local MISTS_OF_PANDARIA = GetBuildInfo():match("5") and true or false
@@ -294,41 +294,41 @@ function update_Broker()
 	local NumFriends, online = GetNumFriends()
 	local realidTotal, realidOnline = BNGetNumFriends()
   
-  if not SocialStateDB.split_LDB_friends then
+  if not GGSocialStateDB.split_LDB_friends then
 
     displayline = online + realidOnline
 
-    if not SocialStateDB.hide_LDB_totals then
+    if not GGSocialStateDB.hide_LDB_totals then
       displayline = displayline .. "/" .. NumFriends + realidTotal
     end
 
-    if not SocialStateDB.hide_LDB_labels then
+    if not GGSocialStateDB.hide_LDB_labels then
       displayline = "Friends " .. displayline
     end
   
   else
   
     -- RealID First
-    if not SocialStateDB.hide_LDB_labels then
+    if not GGSocialStateDB.hide_LDB_labels then
       displayline = displayline .. "RealID "
     end
     
     displayline = displayline .. realidOnline
 
-    if not SocialStateDB.hide_LDB_totals then
+    if not GGSocialStateDB.hide_LDB_totals then
       displayline = displayline .. "/" .. realidTotal
     end
     
     -- Normal Friends Next
     displayline = displayline .. "|r : |cffffff00"
     
-    if not SocialStateDB.hide_LDB_labels then
+    if not GGSocialStateDB.hide_LDB_labels then
       displayline = displayline .. "Friends " 
     end
     
     displayline = displayline ..online
 
-    if not SocialStateDB.hide_LDB_totals then
+    if not GGSocialStateDB.hide_LDB_totals then
       displayline = displayline .. "/" .. NumFriends
     end
   
@@ -338,13 +338,13 @@ function update_Broker()
 		GuildRoster()
 		local guildTotal, online = GetNumGuildMembers()
 		displayline = displayline .. "|r : |cff00ff00"
-		if not SocialStateDB.hide_LDB_labels then
+		if not GGSocialStateDB.hide_LDB_labels then
 			displayline = displayline .. "Guild "
 		end
 
 		displayline = displayline .. online
 
-		if not SocialStateDB.hide_LDB_totals then
+		if not GGSocialStateDB.hide_LDB_totals then
 			displayline = displayline .. "/" .. guildTotal
 		end
 	end
@@ -426,30 +426,30 @@ local function Entry_OnMouseUp(frame, info, button)
 		end
 	elseif button == "MiddleButton" then
 		-- Expand RealID Broadcast
-		SocialStateDB.expand_realID = not SocialStateDB.expand_realID
+		GGSocialStateDB.expand_realID = not GGSocialStateDB.expand_realID
 		LDB.OnEnter(LDB_ANCHOR)
 	end
 end
 
 local function HideOnMouseUp(cell, section)
-	SocialStateDB[section] = not SocialStateDB[section]
+	GGSocialStateDB[section] = not GGSocialStateDB[section]
 	LDB.OnEnter(LDB_ANCHOR)
 end
 
 local function SetGuildSort(cell, sortsection)
-	if SocialStateDB["GuildSort"] == sortsection then
-		SocialStateDB["GuildSort"] = "rev" .. sortsection
+	if GGSocialStateDB["GuildSort"] == sortsection then
+		GGSocialStateDB["GuildSort"] = "rev" .. sortsection
 	else
-		SocialStateDB["GuildSort"] = sortsection
+		GGSocialStateDB["GuildSort"] = sortsection
 	end
 	LDB.OnEnter(LDB_ANCHOR)
 end
 
 local function SetRealIDSort(cell, sortsection)
-	if SocialStateDB["RealIDSort"] == sortsection then
-		SocialStateDB["RealIDSort"] = "rev" .. sortsection
+	if GGSocialStateDB["RealIDSort"] == sortsection then
+		GGSocialStateDB["RealIDSort"] = "rev" .. sortsection
 	else
-		SocialStateDB["RealIDSort"] = sortsection
+		GGSocialStateDB["RealIDSort"] = sortsection
 	end
 	LDB.OnEnter(LDB_ANCHOR)
 end
@@ -468,7 +468,7 @@ function LDB:OnClick(button)
 	end
 
 	if button == "RightButton" then
-		LibStub("AceConfigDialog-3.0"):Open("SocialState")
+		LibStub("AceConfigDialog-3.0"):Open("GGSocialState")
 	end
 end
 
@@ -494,10 +494,10 @@ local FACTION_COLOR_ALLIANCE = "|cff0070dd"
 function LDB.OnEnter(self)
 	LDB_ANCHOR = self
 
-	if LibQTip:IsAcquired("SocialState") then
+	if LibQTip:IsAcquired("GGSocialState") then
 		tooltip:Clear()
 	else
-		tooltip = LibQTip:Acquire("SocialState", 8, "RIGHT", "RIGHT", "LEFT", "LEFT", "CENTER", "CENTER", "RIGHT")
+		tooltip = LibQTip:Acquire("GGSocialState", 8, "RIGHT", "RIGHT", "LEFT", "LEFT", "CENTER", "CENTER", "RIGHT")
 
 		tooltip:SetBackdropColor(0,0,0,1)
 
@@ -505,11 +505,11 @@ function LDB.OnEnter(self)
 		tooltip:SetFont(ssRegFont)
 
 		tooltip:SmartAnchorTo(self)
-		tooltip:SetAutoHideDelay(SocialStateDB.tooltip_autohide, self)
+		tooltip:SetAutoHideDelay(GGSocialStateDB.tooltip_autohide, self)
 	end
 
 	local line = tooltip:AddLine()
-	tooltip:SetCell(line, 1, "SocialState", ssTitleFont, "CENTER", 0)
+	tooltip:SetCell(line, 1, "GGSocialState", ssTitleFont, "CENTER", 0)
 	tooltip:AddLine(" ")
 
 	-------------------------
@@ -521,14 +521,14 @@ function LDB.OnEnter(self)
 	if (numBNOnline > 0) or (numFriendsOnline > 0) then
 		-- Header for Friends
 		line = tooltip:AddLine()
-		if not SocialStateDB.hide_friendsection then
+		if not GGSocialStateDB.hide_friendsection then
 			tooltip:SetCell(line, 1, "|cffffffff" .. _G.FRIENDS .. "|r", "LEFT", 3)
 		else
 			tooltip:SetCell(line, 1, "|cffffffff" .. MINIMIZE .. _G.FRIENDS .. "|r", "LEFT", 3)
 		end
 		tooltip:SetCellScript(line, 1, "OnMouseUp", HideOnMouseUp, "hide_friendsection")
 
-		if not SocialStateDB.hide_friendsection then
+		if not GGSocialStateDB.hide_friendsection then
 			line = tooltip:AddHeader()
 			line = tooltip:SetCell(line, 1, "  ")
 			tooltip:SetCellScript(line, 1, "OnMouseUp", SetRealIDSort, "LEVEL")
@@ -540,7 +540,7 @@ function LDB.OnEnter(self)
 			tooltip:SetCellScript(line, 5, "OnMouseUp", SetRealIDSort, "ZONENAME")
 			line = tooltip:SetCell(line, 6, _G.FRIENDS_LIST_REALM)
 			tooltip:SetCellScript(line, 6, "OnMouseUp", SetRealIDSort, "REALMNAME")
-			if not SocialStateDB.hide_friend_notes then
+			if not GGSocialStateDB.hide_friend_notes then
 				line = tooltip:SetCell(line, 7, _G.NOTE_COLON)
 			else
 				line = tooltip:SetCell(line, 7, MINIMIZE .. _G.NOTE_COLON)
@@ -638,14 +638,14 @@ function LDB.OnEnter(self)
 					end
 				end
 
-				if (SocialStateDB["RealIDSort"] ~= "REALID") and (SocialStateDB["RealIDSort"] ~= "revREALID") then
-					table.sort(realid_table, list_sort[SocialStateDB["RealIDSort"]])
+				if (GGSocialStateDB["RealIDSort"] ~= "REALID") and (GGSocialStateDB["RealIDSort"] ~= "revREALID") then
+					table.sort(realid_table, list_sort[GGSocialStateDB["RealIDSort"]])
 
 				end
 
 				for _, player in ipairs(realid_table) do
 					local broadcast_flag
-					if not SocialStateDB.expand_realID and player["BROADCAST_TEXT"] ~= "" then
+					if not GGSocialStateDB.expand_realID and player["BROADCAST_TEXT"] ~= "" then
 						broadcast_flag = " " .. BROADCAST_ICON
 					else
 						broadcast_flag = ""
@@ -678,13 +678,13 @@ function LDB.OnEnter(self)
 						end
 					end
 
-					if not SocialStateDB.hide_friend_notes then
+					if not GGSocialStateDB.hide_friend_notes then
 						line = tooltip:SetCell(line, 7, player["NOTE"])
 					end
 
 					tooltip:SetLineScript(line, "OnMouseUp", Entry_OnMouseUp, string.format("realid:%s:%s:%d", player["TOONNAME"], player["GIVENNAME"], player["PRESENCEID"]))
 
-					if SocialStateDB.expand_realID and player["BROADCAST_TEXT"] ~= "" then
+					if GGSocialStateDB.expand_realID and player["BROADCAST_TEXT"] ~= "" then
 						line = tooltip:AddLine()
 						line = tooltip:SetCell(line, 1, BROADCAST_ICON .. " |cff7b8489" .. player["BROADCAST_TEXT"] .. "|r", "LEFT", 0)
 						tooltip:SetLineScript(line, "OnMouseUp", Entry_OnMouseUp, string.format("realid:%s:%s:%d", player["TOONNAME"], player["GIVENNAME"], player["PRESENCEID"]))
@@ -717,8 +717,8 @@ function LDB.OnEnter(self)
 						})
 				end
 
-				if (SocialStateDB["RealIDSort"] ~= "REALID") and (SocialStateDB["RealIDSort"] ~= "revREALID") then
-					table.sort(friend_table, list_sort[SocialStateDB["RealIDSort"]])
+				if (GGSocialStateDB["RealIDSort"] ~= "REALID") and (GGSocialStateDB["RealIDSort"] ~= "revREALID") then
+					table.sort(friend_table, list_sort[GGSocialStateDB["RealIDSort"]])
 				else
 					table.sort(friend_table, list_sort["TOONNAME"])
 				end
@@ -730,7 +730,7 @@ function LDB.OnEnter(self)
 					line = tooltip:SetCell(line, 3,
 						string.format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", player["TOONNAME"] .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""));
 					line = tooltip:SetCell(line, 5, player["ZONENAME"])
-					if not SocialStateDB.hide_friend_notes then
+					if not GGSocialStateDB.hide_friend_notes then
 						line = tooltip:SetCell(line, 7, player["NOTE"])
 					end
 
@@ -747,16 +747,16 @@ function LDB.OnEnter(self)
 
 	if IsInGuild() then
 		local guild_table = {}
-		if not SocialStateDB.hide_gmotd then
+		if not GGSocialStateDB.hide_gmotd then
 			line = tooltip:AddLine()
-			if not SocialStateDB.minimize_gmotd then
+			if not GGSocialStateDB.minimize_gmotd then
 				tooltip:SetCell(line, 1, "|cffffffff" .. _G.CHAT_GUILD_MOTD_SEND .. "|r", "LEFT", 3)
 			else
 				tooltip:SetCell(line, 1, "|cffffffff".. MINIMIZE .. _G.CHAT_GUILD_MOTD_SEND .. "|r", "LEFT", 3)
 			end
 			tooltip:SetCellScript(line, 1, "OnMouseUp", HideOnMouseUp, "minimize_gmotd")
 
-			if not SocialStateDB.minimize_gmotd then
+			if not GGSocialStateDB.minimize_gmotd then
 				line = tooltip:AddLine()
 				tooltip:SetCell(line, 1, "|cff00ff00"..GetGuildRosterMOTD().."|r", "LEFT", 0, nil, nil, nil, 100)
 			end
@@ -765,7 +765,7 @@ function LDB.OnEnter(self)
 		end
 
 		local ssGuildName
-		if not SocialStateDB.hide_guildname then
+		if not GGSocialStateDB.hide_guildname then
 			ssGuildName = GetGuildInfo("player")
 		else
 			ssGuildName = _G.GUILD
@@ -773,14 +773,14 @@ function LDB.OnEnter(self)
 
 		-- Header for Guild
 		line = tooltip:AddLine()
-		if not SocialStateDB.hide_guildsection then
+		if not GGSocialStateDB.hide_guildsection then
 			tooltip:SetCell(line, 1, "|cffffffff" .. ssGuildName .."|r", "LEFT", 3)
 		else
 			line = tooltip:SetCell(line, 1, MINIMIZE .. "|cffffffff" .. ssGuildName .. "|r", "LEFT", 3)
 		end
 		tooltip:SetCellScript(line, 1, "OnMouseUp", HideOnMouseUp, "hide_guildsection")
 
-		if not SocialStateDB.hide_guildsection then
+		if not GGSocialStateDB.hide_guildsection then
 			line = tooltip:AddHeader()
 			line = tooltip:SetCell(line, 1, "  ")
 			tooltip:SetCellScript(line, 1, "OnMouseUp", SetGuildSort, "LEVEL")
@@ -791,7 +791,7 @@ function LDB.OnEnter(self)
 			line = tooltip:SetCell(line, 6, _G.RANK)
 			tooltip:SetCellScript(line, 6, "OnMouseUp", SetGuildSort, "RANKINDEX")
 
-			if not SocialStateDB.hide_guild_onotes then
+			if not GGSocialStateDB.hide_guild_onotes then
 				line = tooltip:SetCell(line, 7, _G.NOTE_COLON)
 			else
 				line = tooltip:SetCell(line, 7, MINIMIZE .. _G.NOTE_COLON)
@@ -834,7 +834,7 @@ function LDB.OnEnter(self)
 				end
 			end
 
-			table.sort(guild_table, list_sort[SocialStateDB["GuildSort"]])
+			table.sort(guild_table, list_sort[GGSocialStateDB["GuildSort"]])
 
 			for _, player in ipairs(guild_table) do
 					line = tooltip:AddLine()
@@ -844,7 +844,7 @@ function LDB.OnEnter(self)
 						string.format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", player["TOONNAME"] .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
 					line = tooltip:SetCell(line, 5, player["ZONENAME"] or "???")
 					line = tooltip:SetCell(line, 6, player["RANK"])
-					if not SocialStateDB.hide_guild_onotes then
+					if not GGSocialStateDB.hide_guild_onotes then
 						line = tooltip:SetCell(line, 7, player["NOTE"] .. player["ONOTE"])
 					end
 
@@ -854,16 +854,16 @@ function LDB.OnEnter(self)
 		tooltip:AddLine(" ")
 	end
 
-	if not SocialStateDB.hide_hintline then
+	if not GGSocialStateDB.hide_hintline then
 		line = tooltip:AddLine()
-		if not SocialStateDB.minimize_hintline then
+		if not GGSocialStateDB.minimize_hintline then
 			tooltip:SetCell(line, 1, "Hint:", "LEFT", 3)
 		else
 			tooltip:SetCell(line, 1, MINIMIZE .. "Hint:", "LEFT", 3)
 		end
 		tooltip:SetCellScript(line, 1, "OnMouseUp", HideOnMouseUp, "minimize_hintline")
 
-		if not SocialStateDB.minimize_hintline then
+		if not GGSocialStateDB.minimize_hintline then
 			line = tooltip:AddLine()
 			tooltip:SetCell(line, 1, "|cffeda55fClick|r to open the friends panel.  |cffeda55fAlt-Click|r to open the guild panel.", "LEFT", 0)
 
@@ -902,21 +902,21 @@ frame:SetScript("OnUpdate",
 )
 
 function frame:PLAYER_LOGIN()
-	if not SocialStateDB then
+	if not GGSocialStateDB then
 		-- Initialize default configuration
-		SocialStateDB = {}
+		GGSocialStateDB = {}
 	end
 
-	if not SocialStateDB.tooltip_autohide then
-		SocialStateDB.tooltip_autohide = "0.25"
+	if not GGSocialStateDB.tooltip_autohide then
+		GGSocialStateDB.tooltip_autohide = "0.25"
 	end
 
-	if not SocialStateDB["RealIDSort"] then
-		SocialStateDB["RealIDSort"] = "REALID"
+	if not GGSocialStateDB["RealIDSort"] then
+		GGSocialStateDB["RealIDSort"] = "REALID"
 	end
 
-	if not SocialStateDB["GuildSort"] then
-		SocialStateDB["GuildSort"] = "RANKINDEX"
+	if not GGSocialStateDB["GuildSort"] then
+		GGSocialStateDB["GuildSort"] = "RANKINDEX"
 	end
 end
 
