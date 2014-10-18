@@ -1,6 +1,6 @@
 ## Interface: 60000
 ## Title: GGSocialState
-## Version: 6.0.0
+## Version: @project-version@
 ## Notes: A friend/guild list viewer
 ## Author: Luzisto, gOOvER
 ## SavedVariables: GGSocialStateDB
