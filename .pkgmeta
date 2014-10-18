@@ -1,0 +1,14 @@
+package-as: broker_gg_socialstate
+
+externals:
+		libs/CallbackHandler-1.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/CallbackHandler-1.0
+		libs/AceConfig-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConfig-3.0
+		libs/AceConfig-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConfig-3.0
+		libs/AceGUI-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
+		libs/LibDataBrker_1.1: svn://svn.wowace.com/wow/libdatabroker1-1/mainline/trunk/Libdatabroker-1.1
+		libs/LibQTip-1.0: svn://svn.wowace.com/wow/libqtip-1-0/mainline/trunk/libqtip1.0
+		libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
+		
+enable-nolib-creation: yes
+
+license-output: LICENSE.txt
