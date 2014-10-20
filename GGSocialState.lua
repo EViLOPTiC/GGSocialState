@@ -145,8 +145,8 @@ local options = {
 		},
 		hide_guildname = {
 			type = "toggle", width = "normal",
-			name = "Hide Guild name",
-			desc = "Show or hide the guild name.",
+			name = L["Hide Guild name"],
+			desc = L["Show or hide the guild name."],
 			order = 3,
 			get = function() return GGSocialStateDB.hide_guildname end,
 			set = function(_, v) GGSocialStateDB.hide_guildname = v end,
