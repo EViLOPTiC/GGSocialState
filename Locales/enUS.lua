@@ -1,10 +1,10 @@
-local FOLDER_NAME, private = ...
-local is_silent = true
+-- English localization file for enUS and enGB.
+local debug = false
 --@debug@
-is_silent = false
+debug = true
 --@end-debug@
 
-local L = LibStub("AceLocale-3.0"):NewLocale(FOLDER_NAME, "enUS", true, is_silent)
+local L = LibStub("AceLocale-3.0"):NewLocale("GGSocialState", "enUS", true, debug)
 
 if not L then return end
 

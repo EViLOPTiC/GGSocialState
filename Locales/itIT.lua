@@ -1,5 +1,4 @@
-local FOLDER_NAME, private = ...
-local L = LibStub("AceLocale-3.0"):NewLocale(FOLDER_NAME, "itIT", false)
+local L = LibStub("AceLocale-3.0"):NewLocale("GGSocialState", "itIT", false)
 
 if not L then return end
 
