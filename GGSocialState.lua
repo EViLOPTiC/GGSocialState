@@ -9,6 +9,7 @@ local pairs = _G.pairs
 -------------------------------------------------------------------------------
 -- AddOn namespace.
 -------------------------------------------------------------------------------
+local L = LibStub("AceLocale-3.0"):GetLocale("GGSocialState", false)
 local LibQTip = LibStub('LibQTip-1.0')
 local frame = CreateFrame("frame")
 
@@ -134,7 +135,7 @@ local options = {
 		confdesc = {
 			order = 1,
 			type = "description",
-			name = "LDB plugin that shows friends and guild list.\n",
+			name = L["LDB plugin that shows friends and guild list."],
 			cmdHidden = true
 		},
 		displayheader = {
