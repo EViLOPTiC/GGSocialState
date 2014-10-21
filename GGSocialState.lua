@@ -129,7 +129,7 @@ local list_sort = {
 -- Ace config table
 -------------------------------------------------------------------------------
 local options = {
-	name = "GGSocialState",
+	name = L["GGSocialState"],
 	type = "group",
 	args = {
 		confdesc = {
@@ -153,16 +153,16 @@ local options = {
 		},
 		hide_hintline = {
 			type = "toggle", width = "normal",
-			name = "Hide the Hint line",
-			desc = "Show or hide the hint line under tooltip.",
+			name = L["Hide the Hint line"],
+			desc = L["Show or hide the hint line under tooltip."],
 			order = 4,
 			get = function() return GGSocialStateDB.hide_hintline end,
 			set = function(_, v) GGSocialStateDB.hide_hintline = v end,
 		},
 		hide_motd = {
 			type = "toggle", width = "normal",
-			name = "Hide the MotD",
-			desc = "Hide the guild MotD under the tooltip.",
+			name = L["Hide the MotD"],
+			desc = L["Hide the guild MotD under the tooltip."],
 			order = 5,
 			get = function() return GGSocialStateDB.hide_gmotd end,
 			set = function(_, v) GGSocialStateDB.hide_gmotd = v end,
@@ -170,45 +170,45 @@ local options = {
 		expand_realID = {
 			order = 6,
 			type = "toggle", width = "normal",
-			name = "RealID 2 lines",
-			desc = "Expand RealID to 2 lines in the tooltip for extended info.",
+			name = L["RealID 2 lines"],
+			desc = L["Expand RealID to 2 lines in the tooltip for extended info."],
 			get = function() return GGSocialStateDB.expand_realID end,
 			set = function(_, v) GGSocialStateDB.expand_realID = v end,
 		},
 		tooltip_autohide = {
 			order = 7,
 			type = "input", width = "half",
-			name = "Autohide Delay:",
-			desc = "The tooltip will hide when not hovered over for this (default: 0.25)",
+			name = L["Autohide Delay:"],
+			desc = L["The tooltip will hide when not hovered over for this (default: 0.25)"],
 			get = function() return GGSocialStateDB.tooltip_autohide end,
 			set = function(_, v) GGSocialStateDB.tooltip_autohide = v end,
 		},
 		displayheader2 = {
 			order = 8,
 			type = "header",
-			name = "LDB Display Options",
+			name = L["LDB Display Options"],
 		},
 		hide_ldb_labels = {
 			order = 9,
 			type = "toggle", width = "double",
-			name = "Hide Friends/Guild Labels",
-			desc = "Hide the Friends and Guild labels from the LDB",
+			name = L["Hide Friends/Guild Labels"],
+			desc = L["Hide the Friends and Guild labels from the LDB"],
 			get = function() return GGSocialStateDB.hide_LDB_labels end,
 			set = function(_, v) GGSocialStateDB.hide_LDB_labels = v update_Broker() end
 		},
 		hide_ldb_totals = {
 			order = 10,
 			type = "toggle", width = "normal",
-			name = "Hide Totals",
-			desc = "Hide the Totals field from the LDB",
+			name = L["Hide Totals"],
+			desc = L["Hide the Totals field from the LDB"],
 			get = function() return GGSocialStateDB.hide_LDB_totals end,
 			set = function(_, v) GGSocialStateDB.hide_LDB_totals = v update_Broker() end
 		},
 		split_ldb_friends = {
 			order = 11,
 			type = "toggle", width = "normal",
-			name = "Split Real ID and Normal Friends",
-			desc = "Split Real ID and Normal Friends on the LDB",
+			name = L["Split Real ID and Normal Friends"],
+			desc = L["Split Real ID and Normal Friends on the LDB"],
 			get = function() return GGSocialStateDB.split_LDB_friends end,
 			set = function(_, v) GGSocialStateDB.split_LDB_friends = v update_Broker() end
 		}
@@ -226,6 +226,20 @@ local GetNumRaidMembers = MISTS_OF_PANDARIA and GetNumGroupMembers or GetNumRaid
 -------------------------------------------------------------------------------
 -- Helper Routines
 -------------------------------------------------------------------------------
+
+--use alias from GuildGreet
+local function GGSocialState_GetGGAlias(toonName)
+	if GLDG_DataChar then
+		if GLDG_DataChar[toonName].alias ~=nil then
+			return GLDG_DataChar[toonName].alias
+		else
+			return ""
+		end
+	else
+		return ""
+	end
+end
+
 local function inGroup(name)
 	if GetNumSubgroupMembers() > 0 and UnitInParty(name) then
 		return true
@@ -304,14 +318,14 @@ function update_Broker()
     end
 
     if not GGSocialStateDB.hide_LDB_labels then
-      displayline = "Friends " .. displayline
+      displayline = L["Friends"] .. " " .. displayline
     end
   
   else
   
     -- RealID First
     if not GGSocialStateDB.hide_LDB_labels then
-      displayline = displayline .. "RealID "
+      displayline = displayline .. L["RealID"] .. " "
     end
     
     displayline = displayline .. realidOnline
@@ -324,7 +338,7 @@ function update_Broker()
     displayline = displayline .. "|r : |cffffff00"
     
     if not GGSocialStateDB.hide_LDB_labels then
-      displayline = displayline .. "Friends " 
+      displayline = displayline .. L["Friends"] .. " "
     end
     
     displayline = displayline ..online
@@ -340,7 +354,7 @@ function update_Broker()
 		local guildTotal, online = GetNumGuildMembers()
 		displayline = displayline .. "|r : |cff00ff00"
 		if not GGSocialStateDB.hide_LDB_labels then
-			displayline = displayline .. "Guild "
+			displayline = displayline .. L["Guild"] .. " "
 		end
 
 		displayline = displayline .. online
@@ -559,7 +573,7 @@ function LDB.OnEnter(self)
 						local tableIndex = 0						
 						local status = ""
 
-						local _, _, _, _, _, _, isOnline, lastOnline, isAFK, isDND, broadcast, note = BNGetFriendInfoByID(presenceID)
+						local _, _, _, _, _, _, _, isOnline, lastOnline, isAFK, isDND, broadcast, note = BNGetFriendInfoByID(presenceID)
 						local _, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText = BNGetFriendToonInfo(i, toonidx)
             if toonName then -- yeah
 
@@ -820,7 +834,8 @@ function LDB.OnEnter(self)
 					end
 
 					table.insert(guild_table, {
-						TOONNAME = Ambiguate(toonName, "none"), -- toonName
+						TOONNAME = toonName, -- toonName
+						TOONALIAS = GGSocialState_GetGGAlias(toonName),
 						RANK = rank,
 						RANKINDEX = rankindex,
 						LEVEL = level,
@@ -840,7 +855,8 @@ function LDB.OnEnter(self)
 					line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]))
 					line = tooltip:SetCell(line, 2, player["STATUS"])
 					line = tooltip:SetCell(line, 3,
-						string.format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", player["TOONNAME"] .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
+						string.format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", Ambiguate(player["TOONNAME"], "none") .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
+					line = tooltip:SetCell(line, 4, player["TOONALIAS"])
 					line = tooltip:SetCell(line, 5, player["ZONENAME"] or "???")
 					line = tooltip:SetCell(line, 6, player["RANK"])
 					if not GGSocialStateDB.hide_guild_onotes then
@@ -856,27 +872,31 @@ function LDB.OnEnter(self)
 	if not GGSocialStateDB.hide_hintline then
 		line = tooltip:AddLine()
 		if not GGSocialStateDB.minimize_hintline then
-			tooltip:SetCell(line, 1, "Hint:", "LEFT", 3)
+			tooltip:SetCell(line, 1, L["Hint:"], "LEFT", 3)
 		else
-			tooltip:SetCell(line, 1, MINIMIZE .. "Hint:", "LEFT", 3)
+			tooltip:SetCell(line, 1, MINIMIZE .. L["Hint:"], "LEFT", 3)
 		end
 		tooltip:SetCellScript(line, 1, "OnMouseUp", HideOnMouseUp, "minimize_hintline")
 
 		if not GGSocialStateDB.minimize_hintline then
 			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55fClick|r to open the friends panel.  |cffeda55fAlt-Click|r to open the guild panel.", "LEFT", 0)
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Click"].."|r "..L["to open the friends panel."], "LEFT", 3) 
+			tooltip:SetCell(line, 5, "|cffeda55f"..L["Alt-Click"].."|r "..L["to open the guild panel."], "LEFT", 3) 
+			
+			line = tooltip:AddLine()
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Click"].."|r "..L["a line to whisper a player."], "LEFT", 3)
+			tooltip:SetCell(line, 5, "|cffeda55f"..L["Shift-Click"].."|r "..L["a line to lookup a player."], "LEFT", 3)
+			
+			line = tooltip:AddLine()
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Ctrl-Click"].."|r "..L["a line to edit a note."], "LEFT", 3)
+			tooltip:SetCell(line, 5, "|cffeda55f"..L["Ctrl-RightClick"].."|r "..L["a line to edit an officer note."], "LEFT", 3) 
 
 			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55fClick|r a line to whisper a player.  |cffeda55fShift-Click|r a line to lookup a player.", "LEFT", 0)
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Alt-Click"].."|r "..L["a line to invite."], "LEFT", 3)
+			tooltip:SetCell(line, 5, "|cffeda55f"..L["MiddleClick"].."|r "..L["a line to expand RealID."], "LEFT", 3)
 
 			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55fCtrl-Click|r a line to edit a note.    |cffeda55fCtrl-RightClick|r a line to edit an officer note.", "LEFT", 0)
-
-			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55fAlt-Click|r a line to invite.               |cffeda55fMiddleClick|r a line to expand RealID.", "LEFT", 0)
-
-			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55fClick|r a Header to hide it or sort it.", "LEFT", 0)
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Click"].."|r "..L["a Header to hide it or sort it."], "LEFT", 0)
 		end
 	end
 
