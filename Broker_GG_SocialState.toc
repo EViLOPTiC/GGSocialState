@@ -18,5 +18,6 @@ Libs\LibQTip-1.0\lib.xml
 
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 
+embeds.xml
 locale.xml
 GGSocialState.lua
