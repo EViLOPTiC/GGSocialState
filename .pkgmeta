@@ -1,7 +1,5 @@
 package-as: broker_gg_socialstate
 
-enable-nolib-creation: yes
-
 externals:
   Libs/LibStub:
     url: svn://svn.wowace.com/wow/libstub/mainline/trunk
@@ -28,3 +26,8 @@ externals:
     url: svn://svn.wowace.com/wow/libqtip-1-0/mainline/trunk
   Libs/LibDialog-1.0:
     url: http://hg.wowace.com/wow/libdialog-1-0/mainline
+
+
+enable-nolib-creation: yes
+
+license-output: LICENSE.txt
