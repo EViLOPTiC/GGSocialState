@@ -771,7 +771,7 @@ function LDB.OnEnter(self)
 
 			if not GGSocialStateDB.minimize_gmotd then
 				line = tooltip:AddLine()
-				tooltip:SetCell(line, 1, "|cff00ff00"..GetGuildRosterMOTD().."|r", "LEFT", 0, nil, nil, nil, 100)
+				tooltip:SetCell(line, 1, "|cff00ff00"..GetGuildRosterMOTD().."|r", "LEFT", 0, nil, nil, nil)
 			end
 
 			tooltip:AddLine(" ")
@@ -872,31 +872,31 @@ function LDB.OnEnter(self)
 	if not GGSocialStateDB.hide_hintline then
 		line = tooltip:AddLine()
 		if not GGSocialStateDB.minimize_hintline then
-			tooltip:SetCell(line, 1, L["Hint:"], "LEFT", 3)
+			tooltip:SetCell(line, 1, L["Hint:"], "LEFT", 6)
 		else
-			tooltip:SetCell(line, 1, MINIMIZE .. L["Hint:"], "LEFT", 3)
+			tooltip:SetCell(line, 1, MINIMIZE .. L["Hint:"], "LEFT", 6)
 		end
 		tooltip:SetCellScript(line, 1, "OnMouseUp", HideOnMouseUp, "minimize_hintline")
 
 		if not GGSocialStateDB.minimize_hintline then
 			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55f"..L["Click"].."|r "..L["to open the friends panel."], "LEFT", 3) 
-			tooltip:SetCell(line, 5, "|cffeda55f"..L["Alt-Click"].."|r "..L["to open the guild panel."], "LEFT", 3) 
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Click"].."|r "..L["to open the friends panel."], "LEFT", 5) 
+			tooltip:SetCell(line, 6, "|cffeda55f"..L["Alt-Click"].."|r "..L["to open the guild panel."], "LEFT", 0) 
 			
 			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55f"..L["Click"].."|r "..L["a line to whisper a player."], "LEFT", 3)
-			tooltip:SetCell(line, 5, "|cffeda55f"..L["Shift-Click"].."|r "..L["a line to lookup a player."], "LEFT", 3)
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Click"].."|r "..L["a line to whisper a player."], "LEFT", 5)
+			tooltip:SetCell(line, 6, "|cffeda55f"..L["Shift-Click"].."|r "..L["a line to lookup a player."], "LEFT", 0)
 			
 			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55f"..L["Ctrl-Click"].."|r "..L["a line to edit a note."], "LEFT", 3)
-			tooltip:SetCell(line, 5, "|cffeda55f"..L["Ctrl-RightClick"].."|r "..L["a line to edit an officer note."], "LEFT", 3) 
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Ctrl-Click"].."|r "..L["a line to edit a note."], "LEFT", 5)
+			tooltip:SetCell(line, 6, "|cffeda55f"..L["Ctrl-RightClick"].."|r "..L["a line to edit an officer note."], "LEFT", 0) 
 
 			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55f"..L["Alt-Click"].."|r "..L["a line to invite."], "LEFT", 3)
-			tooltip:SetCell(line, 5, "|cffeda55f"..L["MiddleClick"].."|r "..L["a line to expand RealID."], "LEFT", 3)
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Alt-Click"].."|r "..L["a line to invite."], "LEFT", 5)
+			tooltip:SetCell(line, 6, "|cffeda55f"..L["MiddleClick"].."|r "..L["a line to expand RealID."], "LEFT", 0)
 
 			line = tooltip:AddLine()
-			tooltip:SetCell(line, 1, "|cffeda55f"..L["Click"].."|r "..L["a Header to hide it or sort it."], "LEFT", 0)
+			tooltip:SetCell(line, 1, "|cffeda55f"..L["Click"].."|r "..L["a Header to hide it or sort it."], "LEFT", 5)
 		end
 	end
 
