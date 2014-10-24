@@ -689,6 +689,9 @@ function LDB.OnEnter(self)
 						if player["CLIENT"] == "WTCG" then
 							line = tooltip:SetCell(line, 6, "|cff82c5ffHearthstone|r")
 						end
+						if player["CLIENT"] == "Hero" then
+							line = tooltip:SetCell(line, 6, "|cff82c5ffHeroes of the Storm|r")
+						end
 					end
 
 					if not GGSocialStateDB.hide_friend_notes then
@@ -855,7 +858,7 @@ function LDB.OnEnter(self)
 					line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]))
 					line = tooltip:SetCell(line, 2, player["STATUS"])
 					line = tooltip:SetCell(line, 3,
-						string.format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", Ambiguate(player["TOONNAME"], "none") .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
+						string.format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", Ambiguate(player["TOONNAME"], "guild") .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
 					line = tooltip:SetCell(line, 4, player["TOONALIAS"])
 					line = tooltip:SetCell(line, 5, player["ZONENAME"] or "???")
 					line = tooltip:SetCell(line, 6, player["RANK"])
