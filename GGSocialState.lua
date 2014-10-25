@@ -227,16 +227,40 @@ local GetNumRaidMembers = MISTS_OF_PANDARIA and GetNumGroupMembers or GetNumRaid
 -- Helper Routines
 -------------------------------------------------------------------------------
 
---use alias from GuildGreet
+--find alias in GuildGreet
 local function GGSocialState_GetGGAlias(toonName)
 	if GLDG_DataChar then
 		if GLDG_DataChar[toonName].alias ~=nil then
 			return GLDG_DataChar[toonName].alias
 		else
-			return ""
+			return nil
 		end
 	else
-		return ""
+		return nil
+	end
+end
+
+--find main in Guildgreet
+local function GGSocialState_GetGGMain(toonName)
+	if GLDG_DataChar then
+		if GLDG_DataChar[toonName].alt ~=nil then
+			return string.format("|cff%s%s", GGSocialState_CLASS_COLORS[GLDG_DataChar[GLDG_DataChar[toonName].alt].class] or "B8B8B8", Ambiguate(GLDG_DataChar[toonName].alt, "guild") .. "|r") --enClass
+		else
+			return nil
+		end
+	else
+		return nil
+	end
+end
+
+--display (main / alias) from GuildGreet
+local function GGSocialState_GetMainAlt(toonName)
+	if GGSocialState_GetGGMain(toonName)~=nil and GGSocialState_GetGGAlias(toonName)~=nil then
+		return "("..GGSocialState_GetGGMain(toonName).." / |cffffa0a0"..GGSocialState_GetGGAlias(toonName).."|r)"
+	elseif GGSocialState_GetGGMain(toonName)~=nil then
+		return "("..GGSocialState_GetGGMain(toonName)..")"
+	elseif GGSocialState_GetGGAlias(toonName)~=nil then
+		return "(|cffffa0a0"..GGSocialState_GetGGAlias(toonName).."|r)"
 	end
 end
 
@@ -281,20 +305,20 @@ local function ColoredLevel(level)
 	end
 end
 
-local CLASS_COLORS, color = {}
-local classes_female, classes_male = {}, {}
+GGSocialState_CLASS_COLORS, color = {}
+GGSocialState_classes_female, GGSocialState_classes_male = {}, {}
 
-FillLocalizedClassList(classes_female, true)
-FillLocalizedClassList(classes_male, false)
+FillLocalizedClassList(GGSocialState_classes_female, true)
+FillLocalizedClassList(GGSocialState_classes_male, false)
 
-for token, localizedName in pairs(classes_female) do
+for token, localizedName in pairs(GGSocialState_classes_female) do
 	color = RAID_CLASS_COLORS[token]
-	CLASS_COLORS[localizedName] = string.format("%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255) 
+	GGSocialState_CLASS_COLORS[localizedName] = string.format("%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255) 
 end
 
-for token, localizedName in pairs(classes_male) do
+for token, localizedName in pairs(GGSocialState_classes_male) do
 	color = RAID_CLASS_COLORS[token]
-	CLASS_COLORS[localizedName] = string.format("%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255) 
+	GGSocialState_CLASS_COLORS[localizedName] = string.format("%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255) 
 end
 
 ---------------------
@@ -668,7 +692,7 @@ function LDB.OnEnter(self)
 					line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]))
 					line = tooltip:SetCell(line, 2, player["STATUS"])
 					line = tooltip:SetCell(line, 3,
-						string.format("|cff%s%s",CLASS_COLORS[player["CLASS"]] or "B8B8B8", player["TOONNAME"] .. "|r")..
+						string.format("|cff%s%s",GGSocialState_CLASS_COLORS[player["CLASS"]] or "B8B8B8", player["TOONNAME"] .. "|r")..
 						(inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
 					line = tooltip:SetCell(line, 4,
 						"|cff82c5ff" .. player["GIVENNAME"] .. "|r" .. broadcast_flag)
@@ -744,7 +768,7 @@ function LDB.OnEnter(self)
 					line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]))
 					line = tooltip:SetCell(line, 2, player["STATUS"])
 					line = tooltip:SetCell(line, 3,
-						string.format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", player["TOONNAME"] .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""));
+						string.format("|cff%s%s", GGSocialState_CLASS_COLORS[player["CLASS"]] or "ffffff", player["TOONNAME"] .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""));
 					line = tooltip:SetCell(line, 5, player["ZONENAME"])
 					if not GGSocialStateDB.hide_friend_notes then
 						line = tooltip:SetCell(line, 7, player["NOTE"])
@@ -838,7 +862,7 @@ function LDB.OnEnter(self)
 
 					table.insert(guild_table, {
 						TOONNAME = toonName, -- toonName
-						TOONALIAS = GGSocialState_GetGGAlias(toonName),
+						TOONALIAS = GGSocialState_GetMainAlt(toonName),
 						RANK = rank,
 						RANKINDEX = rankindex,
 						LEVEL = level,
@@ -858,7 +882,7 @@ function LDB.OnEnter(self)
 					line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]))
 					line = tooltip:SetCell(line, 2, player["STATUS"])
 					line = tooltip:SetCell(line, 3,
-						string.format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", Ambiguate(player["TOONNAME"], "guild") .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
+						string.format("|cff%s%s", GGSocialState_CLASS_COLORS[player["CLASS"]] or "ffffff", Ambiguate(player["TOONNAME"], "guild") .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
 					line = tooltip:SetCell(line, 4, player["TOONALIAS"])
 					line = tooltip:SetCell(line, 5, player["ZONENAME"] or "???")
 					line = tooltip:SetCell(line, 6, player["RANK"])
