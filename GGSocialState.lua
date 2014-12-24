@@ -882,7 +882,7 @@ function LDB.OnEnter(self)
 					line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]))
 					line = tooltip:SetCell(line, 2, player["STATUS"])
 					line = tooltip:SetCell(line, 3,
-						string.format("|cff%s%s", GGSocialState_CLASS_COLORS[player["CLASS"]] or "ffffff", Ambiguate(player["TOONNAME"], "guild") .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
+						string.format("|cff%s%s", GGSocialState_CLASS_COLORS[player["CLASS"]] or "ffffff", Ambiguate(player["TOONNAME"], "guild") .. "|r") .. (inGroup(Ambiguate(player["TOONNAME"], "guild")) and GROUP_CHECKMARK or ""))
 					line = tooltip:SetCell(line, 4, player["TOONALIAS"])
 					line = tooltip:SetCell(line, 5, player["ZONENAME"] or "???")
 					line = tooltip:SetCell(line, 6, player["RANK"])
