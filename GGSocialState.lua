@@ -25,6 +25,17 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("GGSocialState",
 })
 
 local update_Broker
+--local MyRealm = GetRealmName()
+
+local GROUP_CHECKMARK	= "|TInterface\\Buttons\\UI-CheckBox-Check:0|t"
+local AWAY_ICON			= "|TInterface\\FriendsFrame\\StatusIcon-Away:18|t"
+local BUSY_ICON			= "|TInterface\\FriendsFrame\\StatusIcon-DnD:18|t"
+local MOBILE_ICON		= "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat:18|t"
+local MINIMIZE			= "|TInterface\\BUTTONS\\UI-PlusButton-Up:0|t"
+local BROADCAST_ICON 	= "|TInterface\\FriendsFrame\\BroadcastIcon:0|t"
+
+local FACTION_COLOR_HORDE = RED_FONT_COLOR_CODE
+local FACTION_COLOR_ALLIANCE = "|cff0070dd"
 
 -------------------------------------------------------------------------------
 -- Font definitions.
@@ -277,7 +288,7 @@ end
 local function player_name_to_index(name)
 	local lookupname
 
-	for i = 1, GetNumFriends() do
+	for i = 1, C_FriendList.GetNumFriends() do
 		lookupname = GetFriendInfo(i)
 
 		if lookupname == name then
@@ -326,7 +337,7 @@ end
 ---------------------
 
 function update_Broker()
-	ShowFriends()
+--	ShowFriends()
 
 	local displayline = ""
 
@@ -373,9 +384,16 @@ function update_Broker()
   
   end
 
-	if IsInGuild() then
+  	if IsInGuild() then
 		C_GuildInfo.GuildRoster()
 		local guildTotal, online = GetNumGuildMembers()
+			for i = 1, GetNumGuildMembers() do
+				local _, _, _, _, _, _, _, _, connected, _, _, _, _, isMobile = GetGuildRosterInfo(i)
+				if isMobile then
+					online = online + 1
+				end
+			end
+
 		displayline = displayline .. "|r : |cff00ff00"
 		if not GGSocialStateDB.hide_LDB_labels then
 			displayline = displayline .. L["Guild"] .. " "
@@ -398,24 +416,21 @@ end
 ----------------------------
 
 local function Entry_OnMouseUp(frame, info, button)
-	local i_type, toon_name, full_name, presence_id = string.split(":", info)
+	local i_type, toon_name, full_name, presence_id, client, realm_name = string.split(":", info)
 
 	if button == "LeftButton" then
 		-- Invite to group/raid
 		if IsAltKeyDown() then
 			if i_type == "realid" then
-				local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID = BNGetFriendInfo(BNGetFriendIndex(presence_id))
-				local _, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText = BNGetFriendToonInfo(BNGetFriendIndex(presence_id), 1)
 				if client == "WoW" then
-					InviteUnit(toon_name.."-"..realmName)
+					C_PartyInfo.InviteUnit(toon_name.."-"..realm_name)
 					return
 				else
-					local _, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText = BNGetFriendToonInfo(BNGetFriendIndex(presence_id), 2)
-					InviteUnit(toon_name.."-"..realmName)
+					C_PartyInfo.InviteUnit(toon_name.."-"..realm_name)
 					return
 				end
 			else
-				InviteUnit(toon_name)
+				C_PartyInfo.InviteUnit(toon_name)
 				return
 			end
 		end
@@ -519,15 +534,6 @@ function LDB.OnLeave() end
 ------------------------
 --      Tooltip!      --
 ------------------------
-local GROUP_CHECKMARK	= "|TInterface\\Buttons\\UI-CheckBox-Check:0|t"
-local AWAY_ICON		= "|TInterface\\FriendsFrame\\StatusIcon-Away:18|t"
-local BUSY_ICON		= "|TInterface\\FriendsFrame\\StatusIcon-DnD:18|t"
-local MOBILE_ICON	= "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat:18|t"
-local MINIMIZE		= "|TInterface\\BUTTONS\\UI-PlusButton-Up:0|t"
-local BROADCAST_ICON = "|TInterface\\FriendsFrame\\BroadcastIcon:0|t"
-
-local FACTION_COLOR_HORDE = RED_FONT_COLOR_CODE
-local FACTION_COLOR_ALLIANCE = "|cff0070dd"
 
 function LDB.OnEnter(self)
 	LDB_ANCHOR = self
@@ -554,7 +560,7 @@ function LDB.OnEnter(self)
 	--  Begin RealID list  --
 	-------------------------
 	local _, numBNOnline = BNGetNumFriends()
-	local _, numFriendsOnline = GetNumFriends()
+	local numFriendsOnline = C_FriendList.GetNumOnlineFriends()
 
 	if (numBNOnline > 0) or (numFriendsOnline > 0) then
 		-- Header for Friends
@@ -590,88 +596,87 @@ function LDB.OnEnter(self)
 			if numBNOnline > 0 then
 				local realid_table = {}
 				for i = 1, numBNOnline do
-					local presenceID, givenName, surname = BNGetFriendInfo(i)
-					for toonidx = 1, BNGetNumFriendToons(i) do
+					local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
+					for gameAccountIndex = 1, C_BattleNet.GetFriendNumGameAccounts(i) do
 						local fcolor
 						local duplicate = false
 						local tableIndex = 0						
 						local status = ""
 
-						local _, _, _, _, _, _, _, isOnline, lastOnline, isAFK, isDND, broadcast, note = BNGetFriendInfoByID(presenceID)
-						local _, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText = BNGetFriendToonInfo(i, toonidx)
-            if toonName then -- yeah
+						local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(i, gameAccountIndex)
+            
+						if gameAccountInfo.characterName then -- yeah
 
-						if faction then
-							if faction == "Horde" then
-								fcolor = FACTION_COLOR_HORDE
-							else
-								fcolor = FACTION_COLOR_ALLIANCE
+							if gameAccountInfo.factionName then
+								if gameAccountInfo.factionName == "Horde" then
+									fcolor = FACTION_COLOR_HORDE
+								else
+									fcolor = FACTION_COLOR_ALLIANCE
+								end
 							end
-						end
 
-						if isAFK then
-							status = AWAY_ICON
-						end
+							if gameAccountInfo.isGameAFK then
+								status = AWAY_ICON
+							end
 
-						if isDND then
-							status = BUSY_ICON
-						end
+							if gameAccountInfo.isGGameBusy then
+								status = BUSY_ICON
+							end
 
-						if note and note ~= "" then note = "|cffff8800{"..note.."}|r" end
+							note = accountInfo.note
+							if note and note ~= "" then note = "|cffff8800{"..note.."}|r" end
 						
-						for _, player in ipairs(realid_table) do
-							tableIndex = tableIndex + 1
-							if player["GIVENNAME"] == givenName then
-								duplicate = true
-								break
-							end
+							for _, player in ipairs(realid_table) do
+								tableIndex = tableIndex + 1
+								if player["GIVENNAME"] == givenName then
+									duplicate = true
+									break
+								end
 					
-							if player["SURNAME"] == surname then
-								duplicate = true
-								break
+								if player["SURNAME"] == surname then
+									duplicate = true
+									break
+								end
+							end
+						
+							if (duplicate) and (gameAccountInfo.clientProgram ~= "App") then
+								table.remove(realid_table, tableIndex)
+							
+								table.insert(realid_table, {
+								GIVENNAME = accountInfo.accountName,
+								SURNAME = accountInfo.battleTag or "",
+								LEVEL = gameAccountInfo.characterLevel,
+								CLASS = gameAccountInfo.className,
+								FCOLOR = fcolor,
+								STATUS = status,
+								BROADCAST_TEXT = accountInfo.customMessage or "",
+								TOONNAME = gameAccountInfo.characterName,
+								CLIENT = gameAccountInfo.clientProgram,
+								ZONENAME = gameAccountInfo.areaName or "",
+								REALMNAME = gameAccountInfo.realmName or "",
+								GAMETEXT = gameText or "",
+								NOTE = note,
+								PRESENCEID = accountInfo.bnetAccountID
+								})
+							elseif not duplicate then
+								table.insert(realid_table, {
+								GIVENNAME = accountInfo.accountName,
+								SURNAME = accountInfo.battleTag or "",
+								LEVEL = gameAccountInfo.characterLevel,
+								CLASS = gameAccountInfo.className,
+								FCOLOR = fcolor,
+								STATUS = status,
+								BROADCAST_TEXT = accountInfo.customMessage or "",
+								TOONNAME = gameAccountInfo.characterName,
+								CLIENT = gameAccountInfo.clientProgram,
+								ZONENAME = gameAccountInfo.areaName or "",
+								REALMNAME = gameAccountInfo.realmName or "",
+								GAMETEXT = gameText or "",
+								NOTE = note,
+								PRESENCEID = accountInfo.bnetAccountID
+								})
 							end
 						end
-						
-						if (duplicate) and (client ~= "App") then
-							table.remove(realid_table, tableIndex)
-							
-							table.insert(realid_table, {
-							GIVENNAME = givenName,
-							SURNAME = surname or "",
-							LEVEL = level,
-							CLASS = class,
-							FCOLOR = fcolor,
-							STATUS = status,
-							BROADCAST_TEXT = broadcast or "",
-							TOONNAME = toonName,
-							CLIENT = client,
-							ZONENAME = zoneName,
-							REALMNAME = realmName,
-							GAMETEXT = gameText,
-							NOTE = note,
-							PRESENCEID = presenceID
-							})
-						elseif not duplicate then
-							table.insert(realid_table, {
-							GIVENNAME = givenName,
-							SURNAME = surname or "",
-							LEVEL = level,
-							CLASS = class,
-							FCOLOR = fcolor,
-							STATUS = status,
-							BROADCAST_TEXT = broadcast or "",
-							TOONNAME = toonName,
-							CLIENT = client,
-							ZONENAME = zoneName,
-							REALMNAME = realmName,
-							GAMETEXT = gameText,
-							NOTE = note,
-							PRESENCEID = presenceID
-							})
-						end
-						
-													
-          end -- note the extra end
 					end
 				end
 
@@ -722,12 +727,12 @@ function LDB.OnEnter(self)
 						line = tooltip:SetCell(line, 7, player["NOTE"])
 					end
 
-					tooltip:SetLineScript(line, "OnMouseUp", Entry_OnMouseUp, string.format("realid:%s:%s:%d", player["TOONNAME"], player["GIVENNAME"], player["PRESENCEID"]))
+					tooltip:SetLineScript(line, "OnMouseUp", Entry_OnMouseUp, string.format("realid:%s:%s:%d:%s:%s", player["TOONNAME"], player["GIVENNAME"], player["PRESENCEID"], player["CLIENT"], player["REALMNAME"]))
 
 					if GGSocialStateDB.expand_realID and player["BROADCAST_TEXT"] ~= "" then
 						line = tooltip:AddLine()
 						line = tooltip:SetCell(line, 1, BROADCAST_ICON .. " |cff7b8489" .. player["BROADCAST_TEXT"] .. "|r", "LEFT", 0)
-						tooltip:SetLineScript(line, "OnMouseUp", Entry_OnMouseUp, string.format("realid:%s:%s:%d", player["TOONNAME"], player["GIVENNAME"], player["PRESENCEID"]))
+						tooltip:SetLineScript(line, "OnMouseUp", Entry_OnMouseUp, string.format("realid:%s:%s:%d:%s:%s", player["TOONNAME"], player["GIVENNAME"], player["PRESENCEID"], player["CLIENT"], player["REALMNAME"]))
 					end
 				end
 				tooltip:AddLine(" ")
@@ -842,8 +847,7 @@ function LDB.OnEnter(self)
 
 			for i = 1, GetNumGuildMembers() do
 				local toonName, rank, rankindex, level, class, zoneName, note, onote, connected, status, classFileName, achievementPoints, achievementRank, isMobile = GetGuildRosterInfo(i)
-
-				if connected then
+				if connected or isMobile then
 					if note and note ~= '' then note="|cff00ff00["..note.."]|r" end
 					if onote and onote ~= '' then onote = "|cff00ffff["..onote.."]|r" end
 
