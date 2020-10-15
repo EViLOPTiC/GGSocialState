@@ -374,7 +374,7 @@ function update_Broker()
   end
 
 	if IsInGuild() then
-		GuildRoster()
+		C_GuildInfo.GuildRoster()
 		local guildTotal, online = GetNumGuildMembers()
 		displayline = displayline .. "|r : |cff00ff00"
 		if not GGSocialStateDB.hide_LDB_labels then
