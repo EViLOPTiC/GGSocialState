@@ -330,7 +330,7 @@ function update_Broker()
 
 	local displayline = ""
 
-	local NumFriends, online = GetNumFriends()
+	local NumFriends, online = C_FriendList.GetNumFriends(), C_FriendList.GetNumOnlineFriends()
 	local realidTotal, realidOnline = BNGetNumFriends()
   
   if not GGSocialStateDB.split_LDB_friends then
