@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 90001
 ## Title: GGSocialState
 ## Version: @project-version@
 ## Notes: A friend/guild list viewer
